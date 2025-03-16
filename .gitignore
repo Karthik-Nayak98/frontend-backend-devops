@@ -3,3 +3,10 @@ frontend/dist
 frontend/.cache
 
 backend/.venv
+backend/.pytest_cache
+backend/.pytest_cache
+backend/__pycache__
+
+# Database
+instance/todo.db
+backend/instance/todo.db
