@@ -1,0 +1,95 @@
+import React, {useState, useEffect} from "react";
+import axios from 'axios';
+import './App.css'
+
+
+export default () => {
+  const [task, setTask] = useState('')
+  const [pendingTasks, setPendingTasks] = useState([])
+  const [completedTasks, setCompletedTasks] = useState([])
+
+    useEffect(() => {
+     const get_tasks =  async ()  =>{
+        const url = "http://localhost:8000/tasks"
+        try {
+          const response = await axios.get(url)
+          setPendingTasks(response.data.filter(item => item.status === "new"))
+          setCompletedTasks(response.data.filter(item => item.status === "completed"))
+        } catch(err) {
+          alert(err)
+        }
+     }
+     get_tasks()
+
+    }, [])
+    
+    const handleTask = async (e) => {
+      const id = e.target.dataset.id
+      const tasks = [...pendingTasks, ...completedTasks]
+      const update_task_data = tasks.find(item => item.id === +id)
+
+      try{
+        const response = await axios.put("http://localhost:8000/tasks", update_task_data)
+        if (response.status == 200) {
+         const {id, status } = response.data
+         if (status == 'completed'){
+          setPendingTasks(pendingTasks.filter(item => item.id !== id))
+          setCompletedTasks([...completedTasks, response.data])
+         } else{
+          setCompletedTasks(completedTasks.filter(item => item.id !== id))
+          setPendingTasks([...pendingTasks, response.data])
+         }
+        }
+      }catch(err) {
+        alert(err)
+      }
+    }
+
+    const handleSubmit = async () => {
+      if(task.trim()){
+        const url = "http://127.0.0.1:8000/tasks"
+        try{
+          const response = await axios.post(url, {'name': task.trim(), 'status': 'new'})
+          if( response.status == 200){
+            setPending([...pendingTasks, response.data])
+            setTask('')
+          }
+        }catch(err) {
+          alert(`ERROR: ${err}`)
+        }
+      }
+    }
+
+    return (
+      <div className="main">
+        <h2 className="header">Todo List</h2>
+        <div className="todo_task">
+          <input value={task} type='text' placeholder="Enter Task" onChange={(e) => setTask(e.target.value)}/>
+          <button onClick={handleSubmit}>Submit</button>
+        </div>
+        <section className="tasks">
+
+        <div className='pending_tasks'>
+          <h2 className='header'>Pending Tasks</h2>
+          <ul>
+            {    
+              pendingTasks.map(item => (
+                <li key={item.id} data-id={item.id} onClick={(e) => handleTask(e)}>{item.name}</li>
+              ))
+            }
+          </ul>
+        </div>
+        <div className="completed_tasks">
+          <h2 className='header'>Completed Tasks</h2>
+          <ul>
+            {    
+              completedTasks.map(item => (
+                <li key={item.id} data-id={item.id} onClick={(e) => handleTask(e)}>{item.name}</li>
+              ))
+            }
+          </ul>
+        </div>
+        </section>
+      </div>
+    )
+} 
