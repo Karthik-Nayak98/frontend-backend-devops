@@ -1,29 +1,29 @@
 .main {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-.header{
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+.header {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-.todo_task input{
-    padding: 0.5rem;
-    margin: 0.8rem;
+.todo_task input {
+  padding: 0.5rem;
+  margin: 0.8rem;
 }
 
-.todo_task button{
-    background-color: #008CBA;;
-    color:white;
-    padding: 0.6rem;
-    cursor: pointer;
-    border:none;
-    border-radius: 5px;
+.todo_task button {
+  background-color: #008cba;
+  color: white;
+  padding: 0.6rem;
+  cursor: pointer;
+  border: none;
+  border-radius: 5px;
 }
 .tasks {
-    display:flex;
-    justify-content: center;
-    gap:1rem;
-    width: 50%;
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  width: 50%;
 }
