@@ -2,21 +2,22 @@ import React, {useState, useEffect} from "react";
 import axios from 'axios';
 import './App.css'
 
-
 export default () => {
   const [task, setTask] = useState('')
   const [pendingTasks, setPendingTasks] = useState([])
   const [completedTasks, setCompletedTasks] = useState([])
+  const [error, setError] = useState()
 
     useEffect(() => {
      const get_tasks =  async ()  =>{
         const url = "http://localhost:8000/tasks"
         try {
           const response = await axios.get(url)
+          setError('')
           setPendingTasks(response.data.filter(item => item.status === "new"))
           setCompletedTasks(response.data.filter(item => item.status === "completed"))
         } catch(err) {
-          alert(err)
+          setError(`Failed to load tasks: ${err.message}`)
         }
      }
      get_tasks()
@@ -31,7 +32,8 @@ export default () => {
       try{
         const response = await axios.put("http://localhost:8000/tasks", update_task_data)
         if (response.status == 200) {
-         const {id, status } = response.data
+          const {id, status } = response.data
+          setError('')
          if (status == 'completed'){
           setPendingTasks(pendingTasks.filter(item => item.id !== id))
           setCompletedTasks([...completedTasks, response.data])
@@ -41,21 +43,22 @@ export default () => {
          }
         }
       }catch(err) {
-        alert(err)
+        setError(`Failed to update task: ${err.message}`)
       }
     }
 
     const handleSubmit = async () => {
       if(task.trim()){
+        setError('')
         const url = "http://127.0.0.1:8000/tasks"
         try{
-          const response = await axios.post(url, {'name': task.trim(), 'status': 'new'})
-          if( response.status == 200){
-            setPending([...pendingTasks, response.data])
+          const response = await axios.post(url, {'name':task.trim(), 'status': 'new'})
+          if( response.status == 201){
+            setPendingTasks([...pendingTasks, response.data])
             setTask('')
           }
         }catch(err) {
-          alert(`ERROR: ${err}`)
+          setError(`Failed to add task: ${err.message}`)
         }
       }
     }
@@ -63,13 +66,17 @@ export default () => {
     return (
       <div className="main">
         <h2 className="header">Todo List</h2>
+        {error && <div className="error">{error}</div>}
+
         <div className="todo_task">
           <input value={task} type='text' placeholder="Enter Task" onChange={(e) => setTask(e.target.value)}/>
           <button onClick={handleSubmit}>Submit</button>
         </div>
         <section className="tasks">
 
-        <div className='pending_tasks'>
+        {
+          pendingTasks.length? 
+        (<div className='pending_tasks'>
           <h2 className='header'>Pending Tasks</h2>
           <ul>
             {    
@@ -78,8 +85,9 @@ export default () => {
               ))
             }
           </ul>
-        </div>
-        <div className="completed_tasks">
+        </div>):null
+        }
+        {completedTasks.length? <div className="completed_tasks">
           <h2 className='header'>Completed Tasks</h2>
           <ul>
             {    
@@ -88,7 +96,7 @@ export default () => {
               ))
             }
           </ul>
-        </div>
+        </div>: null}
         </section>
       </div>
     )
