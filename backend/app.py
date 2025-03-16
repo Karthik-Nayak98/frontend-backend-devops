@@ -42,12 +42,22 @@ def get_tasks():
 @app.route("/tasks", methods=["POST"])
 def add_task():
     task_data = request.get_json()
+
+    # Empty json
+    if any(key not in task_data for key in ["name", "status"]):
+        return jsonify({"error": "Invalid request data"}), 500
+
+    # Empty name or status
+    if task_data["name"] == "" or task_data["status"] == "":
+        return jsonify({"error": "Invalid request data"}), 400
+
     new_task = Todo(name=task_data["name"], status=task_data["status"])
     db.session.add(new_task)
     db.session.commit()
+
     return (
         jsonify({"id": new_task.id, "name": new_task.name, "status": new_task.status}),
-        200,
+        201,
     )
 
 
@@ -58,7 +68,7 @@ def update_task():
     if not task_data or "id" not in task_data:
         return jsonify({"error": "ID is required"}), 400
 
-    task = Todo.query.get(int(task_data["id"]))
+    task = db.session.get(Todo, int(task_data["id"]))
 
     if not task:
         return jsonify({"error": "Task not found"}), 404
