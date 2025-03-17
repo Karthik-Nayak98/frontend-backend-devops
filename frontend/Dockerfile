@@ -1,11 +1,15 @@
-FROM node:13-alphine
+FROM node:22-alpine
 
 WORKDIR /frontend
 
-COPY package*.json .
+COPY package*.json ./
 
 RUN npm install
 
 COPY . .
 
-CMD ["npm" "start"]
+RUN npm run build
+
+EXPOSE 3000
+
+CMD ["npm", "run", "start"]
