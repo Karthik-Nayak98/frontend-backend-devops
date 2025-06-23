@@ -26,3 +26,28 @@ jobs:
         run: |
           cd backend
           python3 -m pytest app_test.py
+
+  frontend:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout frontend code
+        uses: actions/checkout@v4
+
+      - name: Setup Node js environment
+        uses: actions/setup-node@v4
+
+      - name: Install required dependencies
+        run: |
+          cd frontend 
+          npm install
+
+      - name: Run linting and formatting
+        run: |
+          npm lint && npm lint:fix
+          npm format
+      - name: Run the tests for React
+        run: |
+          npm test
