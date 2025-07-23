@@ -2,6 +2,8 @@ name: Containerize, Push, and Deploy the Application
 on: 
   workflow_dispatch:
 
+env: 
+  REGISTRY: ghcr.io
 jobs:
     containerize:
         runs-on: ubuntu-latest
@@ -23,11 +25,16 @@ jobs:
             - name: Setup docker buildx
               uses: docker/setup-buildx-action@v3
 
+            - name: Get the metadata for Docker
+              id: meta-frontend
+              uses: docker/metadata-action@v6
+              with: 
+                images: ${{ env.REGISTRY }}/frontend-todo 
             - name: Build and push the frontend image to docker hub 
               uses: docker/build-push-action@v6
               with: 
                 context: frontend
                 push: true
-                tag: frontend-todo:latest
+                tag: ${{ steps.meta-frontend.outputs.tags }} 
 
                
