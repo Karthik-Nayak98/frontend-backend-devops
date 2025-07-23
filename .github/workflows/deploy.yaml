@@ -28,5 +28,6 @@ jobs:
               with: 
                 context: frontend
                 push: true
+                tag: frontend-todo:latest
 
                
