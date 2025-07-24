@@ -35,3 +35,4 @@ jobs:
                 context: ${{ matrix.context }}
                 push: true
                 tags: ${{ secrets.DOCKER_USERNAME}}/${{ matrix.image }}:latest
+                platforms: linux/amd64,linux/arm64
