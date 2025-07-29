@@ -49,7 +49,7 @@ const App = () => {
   const handleSubmit = async () => {
     if (task.trim()) {
       setError('');
-      const url = 'http://127.0.0.1:8000/tasks';
+      const url = '/tasks';
       try {
         const response = await axios.post(url, { name: task.trim(), status: 'new' });
         if (response.status == 201) {
