@@ -10,7 +10,7 @@ const App = () => {
 
   useEffect(() => {
     const get_tasks = async () => {
-      const url = 'http://localhost:8000/tasks';
+      const url = '/tasks';
       try {
         const response = await axios.get(url);
         setError('');
@@ -29,7 +29,7 @@ const App = () => {
     const update_task_data = tasks.find((item) => item.id === +id);
 
     try {
-      const response = await axios.put('http://localhost:8000/tasks', update_task_data);
+      const response = await axios.put('/tasks', update_task_data);
       if (response.status == 200) {
         const { id, status } = response.data;
         setError('');
