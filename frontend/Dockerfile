@@ -1,15 +1,31 @@
-FROM node:22-alpine
+# Stage 1: Build Stage
+FROM node:22-alpine as builder
 
 WORKDIR /frontend
 
 COPY package*.json ./
 
+# Install all dependencies (including dev) to build
 RUN npm install
 
 COPY . .
 
 RUN npm run build
 
-EXPOSE 3000
+# Stage 2: Production stage
+FROM node:22-slim
+
+WORKDIR /frontend
+
+# Copy only package files first
+COPY package*.json ./
+
+# Install prod dependencies only
+RUN npm install --omit=dev
+
+# Copy build output from builder stage
+COPY --from=builder /frontend/dist ./dist
+
+EXPOSE 3000 
 
 CMD ["npm", "run", "start"]
