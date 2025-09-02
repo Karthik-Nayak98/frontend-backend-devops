@@ -1,11 +1,11 @@
-availableSecrets:
-  secretManager:
-  - versionName: projects/520359608438/secrets/github-token-secret/varsions/latest
-    env: 'PAT'
+# availableSecrets:
+#   secretManager:
+#   - versionName: projects/520359608438/secrets/github-token-secret/varsions/latest
+#     env: 'PAT'
 
 steps:
   - name: "gcr.io/cloud-builders/docker"
-    id: 'Build Container Image'
+    id: "Build Container Image"
     args:
       [
         "build",
@@ -15,7 +15,7 @@ steps:
       ]
 
   - name: "gcr.io/cloud-builders/docker"
-    id: 'Push Container Image to Artifact Registry'
+    id: "Push Container Image to Artifact Registry"
     args:
       [
         "push",
