@@ -21,3 +21,5 @@ steps:
         "push",
         "${_REGION}-docker.pkg.dev/${_PROJECT_ID}/${_REPO_NAME}/${_ARTIFACTORY}:latest",
       ]
+options:
+  logging: CLOUD_LOGGING_ONLY
