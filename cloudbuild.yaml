@@ -1,25 +1,45 @@
 # availableSecrets:
 #   secretManager:
-#   - versionName: projects/520359608438/secrets/github-token-secret/varsions/latest
+#   - versionName: projects/520359608438/secrets/github-token-secret/versions/latest
 #     env: 'PAT'
 
 steps:
   - name: "gcr.io/cloud-builders/docker"
-    id: "Build Container Image"
+    id: "Build Frontend Container Image"
     args:
       [
         "build",
         "-t",
-        "${_REGION}-docker.pkg.dev/${_PROJECT_ID}/${_REPO_NAME}/${_ARTIFACTORY}:latest",
+        "${_REGION}-docker.pkg.dev/${_PROJECT_ID}/${_REPO_NAME}/frontend/${_IMAGE_TAG}:latest",
         ".",
       ]
+    dir: frontend
 
   - name: "gcr.io/cloud-builders/docker"
-    id: "Push Container Image to Artifact Registry"
+    id: "Build Backend Container Image"
+    args:
+      [
+        "build",
+        "-t",
+        "${_REGION}-docker.pkg.dev/${_PROJECT_ID}/${_REPO_NAME}/backend/${_IMAGE_TAG}:latest",
+        ".",
+      ]
+    dir: backend
+
+  - name: "gcr.io/cloud-builders/docker"
+    id: "Push Frontend Container Image to Artifact Registry"
     args:
       [
         "push",
-        "${_REGION}-docker.pkg.dev/${_PROJECT_ID}/${_REPO_NAME}/${_ARTIFACTORY}:latest",
+        "${_REGION}-docker.pkg.dev/${_PROJECT_ID}/${_REPO_NAME}/frontend/${_IMAGE_TAG}:latest",
+      ]
+  - name: "gcr.io/cloud-builders/docker"
+    id: "Push Backend Container Image to Artifact Registry"
+    args:
+      [
+        "push",
+        "${_REGION}-docker.pkg.dev/${_PROJECT_ID}/${_REPO_NAME}/backend/${_IMAGE_TAG}:latest",
       ]
 options:
+  # Using CLOUD_LOGGING_ONLY restricts build logs to Google Cloud Logging only.
   logging: CLOUD_LOGGING_ONLY
