@@ -1,7 +1,3 @@
-availableSecrets:
-  secretManager:
-    - versionName: projects/520359608438/secrets/github-token-secret/versions/latest
-      env: "PAT"
 steps:
   - name: "gcr.io/cloud-builders/docker"
     id: "Build Frontend Container Image"
