@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend-todo-service
+spec:
+  type: ClusterIP
+  selector:
+    app: frontend-todo
+  ports:
+    - port: 80
+      targetPort: 3000
+      protocol: TCP
