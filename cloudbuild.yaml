@@ -5,7 +5,7 @@ steps:
       [
         "build",
         "-t",
-        "${REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPO_NAME}/frontend/${_IMAGE_TAG}:latest",
+        "${LOCATION}-docker.pkg.dev/${PROJECT_ID}/${_REPO_NAME}/frontend/${_IMAGE_TAG}:latest",
         ".",
       ]
     dir: frontend
@@ -16,7 +16,7 @@ steps:
       [
         "build",
         "-t",
-        "${REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPO_NAME}/backend/${_IMAGE_TAG}:latest",
+        "${LOCATION}-docker.pkg.dev/${PROJECT_ID}/${_REPO_NAME}/backend/${_IMAGE_TAG}:latest",
         ".",
       ]
     dir: backend
@@ -26,14 +26,14 @@ steps:
     args:
       [
         "push",
-        "${REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPO_NAME}/frontend/${_IMAGE_TAG}:latest",
+        "${LOCATION}-docker.pkg.dev/${PROJECT_ID}/${_REPO_NAME}/frontend/${_IMAGE_TAG}:latest",
       ]
   - name: "gcr.io/cloud-builders/docker"
     id: "Push Backend Container Image to Artifact Registry"
     args:
       [
         "push",
-        "${REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPO_NAME}/backend/${_IMAGE_TAG}:latest",
+        "${LOCATION}-docker.pkg.dev/${PROJECT_ID}/${_REPO_NAME}/backend/${_IMAGE_TAG}:latest",
       ]
 options:
   # Using CLOUD_LOGGING_ONLY restricts build logs to Google Cloud Logging only.
