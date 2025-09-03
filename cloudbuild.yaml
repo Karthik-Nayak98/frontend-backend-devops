@@ -38,3 +38,6 @@ steps:
 options:
   # Using CLOUD_LOGGING_ONLY restricts build logs to Google Cloud Logging only.
   logging: CLOUD_LOGGING_ONLY
+images:
+  - "$LOCATION-docker.pkg.dev/$PROJECT_ID/${_REPO_NAME}/backend/${_IMAGE_TAG}:latest"
+  - "$LOCATION-docker.pkg.dev/$PROJECT_ID/${_REPO_NAME}/frontend/${_IMAGE_TAG}:latest"
