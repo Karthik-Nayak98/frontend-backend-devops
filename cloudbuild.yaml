@@ -2,42 +2,34 @@ steps:
   - name: "gcr.io/cloud-builders/docker"
     id: "Build Frontend Container Image"
     args:
-      [
-        "build",
-        "-t",
-        "$LOCATION-docker.pkg.dev/$PROJECT_ID/${_REPO_NAME}/frontend/${_IMAGE_TAG}:latest",
-        ".",
-      ]
+      - "build"
+      - "-t"
+      - "$LOCATION-docker.pkg.dev/$PROJECT_ID/${_REPO_NAME}/frontend/${_IMAGE_NAME}:$SHORT_SHA"
+      - "."
     dir: frontend
 
   - name: "gcr.io/cloud-builders/docker"
     id: "Build Backend Container Image"
     args:
-      [
-        "build",
-        "-t",
-        "$LOCATION-docker.pkg.dev/$PROJECT_ID/${_REPO_NAME}/backend/${_IMAGE_TAG}:latest",
-        ".",
-      ]
+      - "build"
+      - "-t"
+      - "$LOCATION-docker.pkg.dev/$PROJECT_ID/${_REPO_NAME}/backend/${_IMAGE_NAME}:$SHORT_SHA"
+      - "."
     dir: backend
+  - name: "gcr.io/cloud-builders/docker"
+    id: Push frontend image
+    args:
+      - "push"
+      - "$LOCATION-docker.pkg.dev/$PROJECT_ID/${_REPO_NAME}/frontend/${_IMAGE_NAME}:$SHORT_SHA"
 
   - name: "gcr.io/cloud-builders/docker"
-    id: "Push Frontend Container Image to Artifact Registry"
+    id: Push backend image
     args:
-      [
-        "push",
-        "$LOCATION-docker.pkg.dev/$PROJECT_ID/${_REPO_NAME}/frontend/${_IMAGE_TAG}:latest",
-      ]
-  - name: "gcr.io/cloud-builders/docker"
-    id: "Push Backend Container Image to Artifact Registry"
-    args:
-      [
-        "push",
-        "$LOCATION-docker.pkg.dev/$PROJECT_ID/${_REPO_NAME}/backend/${_IMAGE_TAG}:latest",
-      ]
+      - "push"
+      - "$LOCATION-docker.pkg.dev/$PROJECT_ID/${_REPO_NAME}/backend/${_IMAGE_NAME}:$SHORT_SHA"
 options:
   # Using CLOUD_LOGGING_ONLY restricts build logs to Google Cloud Logging only.
   logging: CLOUD_LOGGING_ONLY
 images:
-  - "$LOCATION-docker.pkg.dev/$PROJECT_ID/${_REPO_NAME}/backend/${_IMAGE_TAG}:latest"
-  - "$LOCATION-docker.pkg.dev/$PROJECT_ID/${_REPO_NAME}/frontend/${_IMAGE_TAG}:latest"
+  - "$LOCATION-docker.pkg.dev/$PROJECT_ID/${_REPO_NAME}/backend/${_IMAGE_NAME}:$SHORT_SHA"
+  - "$LOCATION-docker.pkg.dev/$PROJECT_ID/${_REPO_NAME}/frontend/${_IMAGE_NAME}:$SHORT_SHA"
