@@ -1,4 +1,18 @@
+availableSecrets:
+  secretManager:
+    - versionName: projects/520359608438/secrets/github-token-secret/versions/latest
+      env: "PAT"
 steps:
+  - name: "gcr.io/cloud-builders/git"
+    entrypoint: bash
+    args:
+      - -c
+      - |
+        echo "Cloning GitHub repo with PAT..."
+        git clone https://oauth2:${PAT}@github.com/Karthik-Nayak98/frontend-backend-devops.git
+        cd my-repo
+        echo "Repo cloned successfully"
+    secretEnv: ["PAT"]
   - name: "gcr.io/cloud-builders/docker"
     id: "Build Frontend Container Image"
     args:
