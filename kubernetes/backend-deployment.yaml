@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-todo-deployment
+  labels:
+    app: backend-todo
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: backend-todo-pod
+  template:
+    metadata:
+      labels:
+        app: backend-todo-pod
+    spec:
+      containers:
+      - name: backend-todo-container
+        image: 94822karthik/backend-todo:latest
+        ports:
+        - containerPort: 8000 
+
