@@ -20,8 +20,8 @@ WORKDIR /frontend
 # Copy only package files first
 COPY package*.json ./
 
-# Install prod dependencies only
-RUN npm install --omit=dev
+# Install prod dependencies only and install vite globally
+RUN npm install --omit=dev && npm install -g vite
 
 # Copy build output from builder stage
 COPY --from=builder /frontend/dist ./dist
