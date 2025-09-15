@@ -47,6 +47,8 @@ steps:
           --set image.repository="$LOCATION-docker.pkg.dev/$PROJECT_ID/${_ARTIFACTORY}/backend/${_IMAGE_NAME}" \
           --set image.tag="$SHORT_SHA"
 
+        cd ../..
+
         # Deploy frontend using Helm
         cd helm/frontend
         helm upgrade --install frontend . \
