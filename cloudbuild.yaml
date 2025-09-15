@@ -27,6 +27,40 @@ steps:
     args:
       - "push"
       - "$LOCATION-docker.pkg.dev/$PROJECT_ID/${_ARTIFACTORY}/backend/${_IMAGE_NAME}:$SHORT_SHA"
+  - name: "gcr.io/cloud-builders/gcloud"
+    id: "Authenticate to the GKE cluster"
+    args:
+      [
+        "container",
+        "clusters",
+        "get-credentials",
+        "${_CLUSTER_NAME}",
+        "--region",
+        "$LOCATION",
+        "--project",
+        "$PROJECT_ID",
+      ]
+
+  # 4. Deploy backend using Helm
+  - name: "gcr.io/cloud-builders/helm"
+    entrypoint: "sh"
+    args:
+      - "-c"
+      - |
+        cd helm/backend
+        helm upgrade --install backend ./Chart.yaml \
+          --set image.repository="$LOCATION-docker.pkg.dev/$PROJECT_ID/${_ARTIFACTORY}/backend/${_IMAGE_NAME}" \
+          --set image.tag="$SHORT_SHA"
+  # 4. Deploy frontend using Helm
+  - name: "gcr.io/cloud-builders/helm"
+    entrypoint: "sh"
+    args:
+      - "-c"
+      - |
+        cd helm/frontend
+        helm upgrade --install backend ./Chart.yaml \
+          --set image.repository="$LOCATION-docker.pkg.dev/$PROJECT_ID/${_ARTIFACTORY}/frontend/${_IMAGE_NAME}" \
+          --set image.tag="$SHORT_SHA"
 options:
   # Using CLOUD_LOGGING_ONLY restricts build logs to Google Cloud Logging only.
   logging: CLOUD_LOGGING_ONLY
