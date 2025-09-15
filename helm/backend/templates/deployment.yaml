@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: "{{ .Values.name }}-deployment"
+  labels:
+    app: { { .Values.name } }
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: { { .Values.name } }
+  template:
+    metadata:
+      labels:
+        app: { { .Values.name } }
+    spec:
+      containers:
+        - name: backend-todo-container
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          ports:
+            - containerPort: { { .Values.containerPort } }
