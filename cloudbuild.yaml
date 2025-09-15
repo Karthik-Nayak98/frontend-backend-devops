@@ -30,6 +30,8 @@ steps:
   - name: "gcr.io/cloud-builders/gcloud"
     id: "Authenticate to the GKE cluster"
     entrypoint: "bash"
+    env:
+      - USE_GKE_GCLOUD_AUTH_PLUGIN=True
     args:
       - "-c"
       - |
