@@ -1,0 +1,26 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: "{{ .Values.name }}-ingress"
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: "{{ .Values.name }}.app"
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: "{{ .Values.name }}-service"
+                port:
+                  number: 80
+          - path: /tasks
+            pathType: Prefix
+            backend:
+              service:
+                name: backend-todo-service
+                port:
+                  number: 8000
