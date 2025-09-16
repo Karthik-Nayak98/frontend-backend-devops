@@ -4,11 +4,11 @@ metadata:
   name: "{{ .Values.name }}-ingress"
   annotations:
     nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    kubernetes.io/ingress.class: "gce"   # if using GKE
 spec:
   ingressClassName: nginx
   rules:
-    - host: "{{ .Values.name }}.app"
-      http:
+    - http:
         paths:
           - path: /
             pathType: Prefix
