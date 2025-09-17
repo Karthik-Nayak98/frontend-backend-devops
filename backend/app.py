@@ -25,6 +25,10 @@ with app.app_context():
     db.create_all()
 
 
+@app.get("/")
+def root():
+    return {"status": "ok"}
+
 @app.route("/tasks", methods=["GET"])
 def get_tasks():
     tasks = Todo.query.all()
